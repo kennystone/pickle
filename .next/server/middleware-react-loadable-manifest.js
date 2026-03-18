@@ -1,1 +1,0 @@
-self.__REACT_LOADABLE_MANIFEST='{"components/PickleballAnimation.tsx -> canvas-confetti":{"id":1708,"files":["static/chunks/708.740eb0cb11cab9f8.js"]}}';
