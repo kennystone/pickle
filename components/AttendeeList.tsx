@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import type { Attendee } from "@/lib/database.types";
+import { gameFullMessage } from "@/lib/game-logic";
 import PlayerIcon from "./PlayerIcon";
 
 function timeAgo(dateStr: string): string {
@@ -99,7 +100,7 @@ export default function AttendeeList({
 
       {isFull && (
         <div className="bg-ball-yellow text-pickle-dark font-bold text-center py-2 px-4 rounded-xl text-sm">
-          🎉 Game is full! See you on the court!
+          🎉 {gameFullMessage(viewerName, attendees.map((a) => a.name))}
         </div>
       )}
 

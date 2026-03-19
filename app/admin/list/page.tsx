@@ -84,13 +84,7 @@ export default async function ListPage() {
   const previous = games.filter((g) => g.date < today).reverse();
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-950 to-teal-700">
-      <div className="text-white px-4 py-6">
-        <div className="max-w-md mx-auto text-center">
-          <h1 className="text-4xl font-serif">Games</h1>
-        </div>
-      </div>
-
+    <>
       <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         {/* Upcoming */}
         <div>
@@ -122,6 +116,6 @@ export default async function ListPage() {
           </div>
         )}
       </div>
-    </div>
+    </>
   );
 }

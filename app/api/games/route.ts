@@ -41,7 +41,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { date, time, place, people_needed } = await request.json();
+  const { date, time, place, duration, people_needed } = await request.json();
 
   if (!date || !time || !place || !people_needed) {
     log.warn("games create missing fields", { date, time, place, people_needed });
@@ -73,7 +73,7 @@ export async function POST(request: Request) {
 
   const { data, error } = await supabase
     .from("games")
-    .insert({ slug, date, time, place, people_needed } as never)
+    .insert({ slug, date, time, place, duration: duration || 120, people_needed } as never)
     .select()
     .single() as { data: Game | null; error: { message: string } | null };
 

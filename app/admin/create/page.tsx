@@ -31,7 +31,8 @@ export default function CreatePage() {
   const [form, setForm] = useState({
     date: defaults.date,
     time: defaults.time,
-    place: "Pickle Athletics",
+    place: "PA",
+    duration: "120",
     people_needed: "5",
   });
 
@@ -47,6 +48,7 @@ export default function CreatePage() {
         date: form.date,
         time: form.time,
         place: form.place,
+        duration: parseInt(form.duration),
         people_needed: parseInt(form.people_needed),
       }),
     });
@@ -66,8 +68,8 @@ export default function CreatePage() {
   }
 
   return (
-    <div className="min-h-screen bg-stone-50 px-4 py-8">
-      <div className="max-w-sm mx-auto">
+    <div className="px-4 py-8">
+      <div className="max-w-md mx-auto">
         <div className="text-center mb-8">
           <svg className="w-20 h-20 mx-auto mb-2" viewBox="0 0 1200 1200" fill="#10b981">
             <path d="m502.69 727.31c-7.8281 0-15.609-3.2344-21.188-9.6094-10.219-11.672-9.0469-29.484 2.625-39.703l134.81-117.94c11.672-10.219 29.438-9.0469 39.656 2.625s9.0469 29.484-2.6719 39.703l-134.81 117.94c-5.3438 4.6875-11.953 6.9375-18.516 6.9375z"/>
@@ -84,11 +86,11 @@ export default function CreatePage() {
             <path d="m455.58 984.74c0 50.016-75 50.016-75 0 0-49.969 75-49.969 75 0"/>
             <path d="m508.31 822.42c0 50.016-75 50.016-75 0s75-50.016 75 0"/>
           </svg>
-          <h1 className="text-4xl font-bold text-emerald-600">New Game</h1>
-          <p className="text-stone-500 text-sm mt-1">Set up your pickleball game</p>
+          <h1 className="text-4xl font-bold text-white">New Game</h1>
+          <p className="text-white/60 text-sm mt-1">Set up your pickleball game</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl p-5 shadow-sm border border-stone-100 space-y-4">
           <div>
             <label className="block text-sm font-medium text-stone-600 mb-1">Date</label>
             <input
@@ -100,32 +102,64 @@ export default function CreatePage() {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-stone-600 mb-1">Time</label>
-            <div className="inline-flex items-center border-2 border-stone-200 rounded-full bg-white overflow-hidden">
-              <span className="px-5 py-3 text-base font-medium text-stone-800">
-                {(() => {
-                  const [h, m] = form.time.split(":").map(Number);
-                  const d = new Date();
-                  d.setHours(h, m);
-                  return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
-                })()}
-              </span>
-              <div className="flex border-l-2 border-stone-200">
-                <button
-                  type="button"
-                  onClick={() => set("time", adjustTime(form.time, -30))}
-                  className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors"
-                >
-                  −
-                </button>
-                <button
-                  type="button"
-                  onClick={() => set("time", adjustTime(form.time, 30))}
-                  className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors border-l-2 border-stone-200"
-                >
-                  +
-                </button>
+          <div className="flex gap-4">
+            <div>
+              <label className="block text-sm font-medium text-stone-600 mb-1">Time</label>
+              <div className="inline-flex items-center border-2 border-stone-200 rounded-full bg-white overflow-hidden">
+                <span className="px-5 py-3 text-base font-medium text-stone-800">
+                  {(() => {
+                    const [h, m] = form.time.split(":").map(Number);
+                    const d = new Date();
+                    d.setHours(h, m);
+                    return d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+                  })()}
+                </span>
+                <div className="flex border-l-2 border-stone-200">
+                  <button
+                    type="button"
+                    onClick={() => set("time", adjustTime(form.time, -30))}
+                    className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors"
+                  >
+                    −
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => set("time", adjustTime(form.time, 30))}
+                    className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors border-l-2 border-stone-200"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-stone-600 mb-1">Duration</label>
+              <div className="inline-flex items-center border-2 border-stone-200 rounded-full bg-white overflow-hidden">
+                <span className="px-5 py-3 text-base font-medium text-stone-800">
+                  {(() => {
+                    const mins = parseInt(form.duration);
+                    const h = Math.floor(mins / 60);
+                    const m = mins % 60;
+                    return h > 0 ? (m > 0 ? `${h}h ${m}m` : `${h}h`) : `${m}m`;
+                  })()}
+                </span>
+                <div className="flex border-l-2 border-stone-200">
+                  <button
+                    type="button"
+                    onClick={() => set("duration", String(Math.max(30, parseInt(form.duration) - 30)))}
+                    className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors"
+                  >
+                    −
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => set("duration", String(Math.min(480, parseInt(form.duration) + 30)))}
+                    className="px-4 py-3 text-stone-600 font-bold text-lg hover:bg-stone-50 transition-colors border-l-2 border-stone-200"
+                  >
+                    +
+                  </button>
+                </div>
               </div>
             </div>
           </div>

@@ -55,15 +55,7 @@ export default function FavoritesPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-950 to-teal-700">
-      <div className="text-white px-4 py-6">
-        <div className="max-w-md mx-auto text-center">
-          <h1 className="text-4xl font-serif">Favorites</h1>
-          <p className="text-white/60 text-sm mt-2">Manage your regular players</p>
-        </div>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 py-6 space-y-6">
+    <div className="max-w-md mx-auto px-4 py-6 space-y-6">
         <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
           <form onSubmit={handleAdd} className="flex gap-2 mb-4">
             <input
@@ -103,6 +95,5 @@ export default function FavoritesPage() {
           </ul>
         </div>
       </div>
-    </div>
   );
 }

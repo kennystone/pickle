@@ -87,3 +87,30 @@ export async function POST(request: Request) {
   log.info("invite created", { slug, game_id, player_name });
   return NextResponse.json(data);
 }
+
+export async function PATCH(request: Request) {
+  const admin = await isAdmin();
+  if (!admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id, declined } = await request.json();
+  if (!id || typeof declined !== "boolean") {
+    return NextResponse.json({ error: "Missing fields" }, { status: 400 });
+  }
+
+  const supabase = createServerClient();
+
+  const { data, error } = await supabase
+    .from("invites")
+    .update({ declined } as never)
+    .eq("id", id)
+    .select()
+    .single() as { data: Invite | null; error: { message: string } | null };
+
+  if (error || !data) {
+    return NextResponse.json({ error: error?.message ?? "Update failed" }, { status: 500 });
+  }
+
+  return NextResponse.json(data);
+}

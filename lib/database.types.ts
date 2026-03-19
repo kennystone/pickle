@@ -9,6 +9,7 @@ export type Database = {
           time: string;
           place: string;
           people_needed: number;
+          duration: number;
           created_at: string;
         };
         Insert: {
@@ -18,6 +19,7 @@ export type Database = {
           time: string;
           place: string;
           people_needed: number;
+          duration?: number;
           created_at?: string;
         };
         Update: {
@@ -27,6 +29,7 @@ export type Database = {
           time?: string;
           place?: string;
           people_needed?: number;
+          duration?: number;
           created_at?: string;
         };
         Relationships: [];
@@ -83,6 +86,7 @@ export type Database = {
           slug: string;
           game_id: string;
           player_name: string;
+          declined: boolean;
           created_at: string;
         };
         Insert: {
@@ -90,6 +94,7 @@ export type Database = {
           slug: string;
           game_id: string;
           player_name: string;
+          declined?: boolean;
           created_at?: string;
         };
         Update: {
@@ -97,6 +102,7 @@ export type Database = {
           slug?: string;
           game_id?: string;
           player_name?: string;
+          declined?: boolean;
           created_at?: string;
         };
         Relationships: [
