@@ -7,10 +7,10 @@ import type { Game, Attendee } from "@/lib/database.types";
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const slug = searchParams.get("slug");
+  const id = searchParams.get("id");
 
-  if (!slug) {
-    return NextResponse.json({ error: "Missing slug" }, { status: 400 });
+  if (!id) {
+    return NextResponse.json({ error: "Missing id" }, { status: 400 });
   }
 
   const supabase = createServerClient();
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
   const { data: game } = await supabase
     .from("games")
     .select("*")
-    .eq("slug", slug)
+    .eq("id", id)
     .maybeSingle() as { data: Game | null };
 
   if (!game) {
@@ -82,6 +82,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error?.message ?? "Insert failed" }, { status: 500 });
   }
 
+  // Auto-add Kenny Stone to every new game
+  await supabase
+    .from("attendees")
+    .insert({ game_id: data.id, name: "Kenny Stone" } as never);
+
   log.info("game created", { slug, date, time, place, people_needed });
-  return NextResponse.json({ slug: data.slug });
+  return NextResponse.json({ id: data.id });
 }

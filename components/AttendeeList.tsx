@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSupabaseClient } from "@/lib/supabase-client";
 import type { Attendee } from "@/lib/database.types";
+import PlayerIcon from "./PlayerIcon";
 
 function timeAgo(dateStr: string): string {
   const diff = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000);
@@ -16,12 +17,28 @@ export default function AttendeeList({
   initialAttendees,
   gameId,
   peopleNeeded,
+  viewerName,
 }: {
   initialAttendees: Attendee[];
   gameId: string;
   peopleNeeded: number;
+  viewerName?: string;
 }) {
   const [attendees, setAttendees] = useState<Attendee[]>(initialAttendees);
+  const [removingId, setRemovingId] = useState<string | null>(null);
+
+  async function handleRemove(id: string) {
+    setRemovingId(id);
+    const res = await fetch("/api/attendees", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      setAttendees((prev) => prev.filter((a) => a.id !== id));
+    }
+    setRemovingId(null);
+  }
 
   useEffect(() => {
     const supabase = getSupabaseClient();
@@ -44,6 +61,18 @@ export default function AttendeeList({
           });
         }
       )
+      .on(
+        "postgres_changes",
+        {
+          event: "DELETE",
+          schema: "public",
+          table: "attendees",
+          filter: `game_id=eq.${gameId}`,
+        },
+        (payload) => {
+          setAttendees((prev) => prev.filter((a) => a.id !== payload.old.id));
+        }
+      )
       .subscribe();
 
     return () => {
@@ -57,20 +86,15 @@ export default function AttendeeList({
 
   return (
     <div className="space-y-4">
-      {/* Count header */}
-      <div className="text-center">
-        <div className="text-4xl font-bold text-pickle-green">
-          {count} <span className="text-stone-400 font-normal text-2xl">/ {peopleNeeded}</span>
+      {/* Progress bar with count */}
+      <div className="flex items-center gap-3">
+        <div className="flex-1 h-3 bg-stone-200 rounded-full overflow-hidden">
+          <div
+            className="h-full bg-emerald-600 transition-all duration-500 rounded-full"
+            style={{ width: `${fillPercent}%` }}
+          />
         </div>
-        <div className="text-stone-500 text-sm mt-1">players confirmed</div>
-      </div>
-
-      {/* Progress bar */}
-      <div className="h-3 bg-stone-200 rounded-full overflow-hidden">
-        <div
-          className="h-full bg-pickle-green transition-all duration-500 rounded-full"
-          style={{ width: `${fillPercent}%` }}
-        />
+        <span className="text-sm font-semibold text-emerald-600 whitespace-nowrap">{count}/{peopleNeeded}</span>
       </div>
 
       {isFull && (
@@ -82,16 +106,28 @@ export default function AttendeeList({
       {/* Attendee list */}
       {attendees.length > 0 ? (
         <ul className="space-y-2">
-          {attendees.map((a) => (
+          {attendees.map((a, i) => (
             <li
               key={a.id}
               className="flex items-center justify-between bg-white px-4 py-3 rounded-xl border border-stone-100 animate-fade-slide-up"
             >
               <div className="flex items-center gap-2">
-                <span className="text-xl">🥒</span>
+                <PlayerIcon index={i} gameId={gameId} playerName={a.name} />
                 <span className="font-medium">{a.name}</span>
               </div>
-              <span className="text-xs text-stone-400">{timeAgo(a.created_at)}</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xs text-stone-400">{timeAgo(a.created_at)}</span>
+                {viewerName && a.name.toLowerCase() === viewerName.toLowerCase() && (
+                  <button
+                    onClick={() => handleRemove(a.id)}
+                    disabled={removingId === a.id}
+                    className="text-stone-300 hover:text-red-500 transition-colors text-lg leading-none"
+                    title={`Remove ${a.name}`}
+                  >
+                    {removingId === a.id ? "..." : "\u00d7"}
+                  </button>
+                )}
+              </div>
             </li>
           ))}
         </ul>

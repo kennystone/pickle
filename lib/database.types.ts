@@ -77,6 +77,37 @@ export type Database = {
         };
         Relationships: [];
       };
+      invites: {
+        Row: {
+          id: string;
+          slug: string;
+          game_id: string;
+          player_name: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          game_id: string;
+          player_name: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          game_id?: string;
+          player_name?: string;
+          created_at?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: "invites_game_id_fkey";
+            columns: ["game_id"];
+            referencedRelation: "games";
+            referencedColumns: ["id"];
+          }
+        ];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -88,3 +119,4 @@ export type Database = {
 export type Game = Database["public"]["Tables"]["games"]["Row"];
 export type Attendee = Database["public"]["Tables"]["attendees"]["Row"];
 export type Favorite = Database["public"]["Tables"]["favorites"]["Row"];
+export type Invite = Database["public"]["Tables"]["invites"]["Row"];

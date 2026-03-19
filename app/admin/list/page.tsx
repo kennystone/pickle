@@ -53,7 +53,7 @@ function GameCard({ game }: { game: GameWithAttendees }) {
 
   return (
     <Link
-      href={`/admin/game/${game.slug}`}
+      href={`/admin/game/${game.id}`}
       className="block bg-white rounded-2xl p-4 shadow-sm border border-stone-100 hover:border-emerald-300 transition-colors"
     >
       <div className="flex items-center justify-between">
