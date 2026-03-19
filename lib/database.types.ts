@@ -59,6 +59,24 @@ export type Database = {
           }
         ];
       };
+      favorites: {
+        Row: {
+          id: string;
+          name: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          name: string;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          name?: string;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
     Functions: Record<string, never>;
@@ -69,3 +87,4 @@ export type Database = {
 
 export type Game = Database["public"]["Tables"]["games"]["Row"];
 export type Attendee = Database["public"]["Tables"]["attendees"]["Row"];
+export type Favorite = Database["public"]["Tables"]["favorites"]["Row"];

@@ -21,7 +21,7 @@ export default function LoginPage() {
     });
 
     if (res.ok) {
-      router.push("/create");
+      router.push("/admin");
     } else {
       setError("Wrong password. Try again.");
       setLoading(false);
@@ -33,7 +33,7 @@ export default function LoginPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <div className="text-6xl mb-3">🥒</div>
-          <h1 className="text-2xl font-bold text-pickle-green">Kenny Pickle</h1>
+          <h1 className="text-2xl font-bold text-emerald-600">Kenny Pickle</h1>
           <p className="text-stone-500 mt-1 text-sm">Game organizer login</p>
         </div>
 
@@ -43,7 +43,7 @@ export default function LoginPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
-            className="w-full px-4 py-3 text-lg border-2 border-stone-200 rounded-xl focus:outline-none focus:border-pickle-green bg-white"
+            className="w-full px-4 py-3 text-lg border-2 border-stone-200 rounded-xl focus:outline-none focus:border-emerald-600 bg-white"
             autoFocus
             autoComplete="current-password"
           />
@@ -53,7 +53,7 @@ export default function LoginPage() {
           <button
             type="submit"
             disabled={loading || !password}
-            className="w-full py-3 px-6 bg-pickle-green text-white font-semibold text-lg rounded-xl disabled:opacity-50 active:scale-95 transition-transform"
+            className="w-full py-3 px-6 bg-emerald-600 text-white font-semibold text-lg rounded-xl disabled:opacity-50 active:scale-95 transition-transform"
           >
             {loading ? "Checking..." : "Enter 🥒"}
           </button>

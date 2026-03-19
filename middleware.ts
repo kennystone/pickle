@@ -12,16 +12,16 @@ const secret = new TextEncoder().encode(
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only protect /create (not /create/login)
-  if (pathname === "/create") {
+  // Protect all /admin routes except /admin/login
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
     const token = request.cookies.get(COOKIE_NAME)?.value;
     if (!token) {
-      return NextResponse.redirect(new URL("/create/login", request.url));
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
     try {
       await jwtVerify(token, secret);
     } catch {
-      return NextResponse.redirect(new URL("/create/login", request.url));
+      return NextResponse.redirect(new URL("/admin/login", request.url));
     }
   }
 
@@ -29,5 +29,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/create"],
+  matcher: ["/admin/:path*"],
 };
