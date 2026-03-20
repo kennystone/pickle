@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import Link from "next/link";
 import { createServerClient } from "@/lib/supabase-server";
 import type { Game, Attendee } from "@/lib/database.types";
