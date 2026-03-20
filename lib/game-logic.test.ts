@@ -5,6 +5,7 @@ import {
   getLocationUrl,
   isKennyStone,
   canRemoveAttendee,
+  canAdminPerformAction,
   formatDuration,
   formatPillText,
   gameFullMessage,
@@ -12,6 +13,28 @@ import {
   getInviteAction,
   getRsvpState,
 } from "./game-logic";
+
+describe("canAdminPerformAction", () => {
+  test("admin can delete a game", () => {
+    expect(canAdminPerformAction(true, "delete")).toBe(true);
+  });
+
+  test("non-admin cannot delete a game", () => {
+    expect(canAdminPerformAction(false, "delete")).toBe(false);
+  });
+
+  test("admin can perform all actions", () => {
+    for (const action of ["create", "delete", "invite", "remove_player"] as const) {
+      expect(canAdminPerformAction(true, action)).toBe(true);
+    }
+  });
+
+  test("non-admin cannot perform any action", () => {
+    for (const action of ["create", "delete", "invite", "remove_player"] as const) {
+      expect(canAdminPerformAction(false, action)).toBe(false);
+    }
+  });
+});
 
 describe("isGameFull", () => {
   test("not full when under capacity", () => {

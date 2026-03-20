@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, FormEvent } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { formatTimeRange } from "@/lib/time-range";
 import { getInviteStatus, getInviteAction, type InviteStatus } from "@/lib/game-logic";
 
@@ -44,6 +44,7 @@ function formatGame(game: Game) {
 
 export default function AdminGamePage() {
   const { id } = useParams<{ id: string }>();
+  const router = useRouter();
   const [game, setGame] = useState<Game | null>(null);
   const [attendees, setAttendees] = useState<Attendee[]>([]);
   const [favorites, setFavorites] = useState<Favorite[]>([]);
@@ -165,6 +166,18 @@ export default function AdminGamePage() {
     );
   }
 
+  async function deleteGame() {
+    if (!confirm("Delete this game? This cannot be undone.")) return;
+    const res = await fetch("/api/games", {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) {
+      router.push("/admin/list");
+    }
+  }
+
   async function handleCustomInvite(e: FormEvent) {
     e.preventDefault();
     const name = customName.trim();
@@ -203,81 +216,6 @@ export default function AdminGamePage() {
       </div>
 
       <div className="max-w-md mx-auto px-4 py-6 space-y-6">
-        {/* Confirmed attendees */}
-        {attendees.length > 0 && (
-          <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
-            <h2 className="font-semibold text-stone-700 mb-3">Confirmed</h2>
-            <div className="flex flex-wrap gap-2">
-              {attendees.map((a) => (
-                <span
-                  key={a.id}
-                  className="inline-flex items-center gap-1 px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium"
-                >
-                  {a.name}
-                  <button
-                    onClick={() => removeAttendee(a.id)}
-                    disabled={removingId === a.id}
-                    className="text-emerald-400 hover:text-red-500 transition-colors ml-0.5"
-                  >
-                    {removingId === a.id ? "..." : "\u00d7"}
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Quick invite from favorites */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
-          <h2 className="font-semibold text-stone-700 mb-3">Quick invite</h2>
-          <p className="text-xs text-stone-400 mb-3">Tap a name to generate their invite link</p>
-          <div className="flex flex-wrap gap-2">
-            {favorites.map((fav) => {
-              const alreadyIn = attendeeNames.has(fav.name.toLowerCase());
-              const isGenerating = generating === fav.name;
-              return (
-                <button
-                  key={fav.id}
-                  onClick={() => createInviteAndCopy(fav.name)}
-                  disabled={alreadyIn || isGenerating}
-                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all active:scale-95 ${
-                    alreadyIn
-                      ? "bg-emerald-100 text-emerald-400 cursor-default"
-                      : copied === fav.name
-                        ? "bg-emerald-600 text-white"
-                        : isGenerating
-                          ? "bg-stone-200 text-stone-400"
-                          : "bg-stone-100 text-stone-700 hover:bg-stone-200"
-                  }`}
-                >
-                  {alreadyIn ? `${fav.name} ✓` : copied === fav.name ? "Copied!" : isGenerating ? "..." : fav.name}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Custom invite */}
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
-          <h2 className="font-semibold text-stone-700 mb-3">Custom invite</h2>
-          <form onSubmit={handleCustomInvite} className="flex gap-2">
-            <input
-              type="text"
-              value={customName}
-              onChange={(e) => setCustomName(e.target.value)}
-              placeholder="Player name"
-              className="flex-1 px-4 py-2 border-2 border-stone-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600"
-            />
-            <button
-              type="submit"
-              disabled={!customName.trim() || generating !== null}
-              className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-xl disabled:opacity-50 active:scale-95 transition-transform"
-            >
-              Generate Link
-            </button>
-          </form>
-        </div>
-
         {/* Invites table */}
         {invites.length > 0 && (
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
@@ -342,6 +280,70 @@ export default function AdminGamePage() {
             </div>
           </div>
         )}
+
+        {/* Quick invite from favorites */}
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
+          <h2 className="font-semibold text-stone-700 mb-3">Quick invite</h2>
+          <p className="text-xs text-stone-400 mb-3">Tap a name to generate their invite link</p>
+          <div className="flex flex-wrap gap-2">
+            {favorites.map((fav) => {
+              const alreadyIn = attendeeNames.has(fav.name.toLowerCase());
+              const isGenerating = generating === fav.name;
+              return (
+                <button
+                  key={fav.id}
+                  onClick={() => createInviteAndCopy(fav.name)}
+                  disabled={alreadyIn || isGenerating}
+                  className={`px-4 py-2 rounded-full text-sm font-medium transition-all active:scale-95 ${
+                    alreadyIn
+                      ? "bg-emerald-100 text-emerald-400 cursor-default"
+                      : copied === fav.name
+                        ? "bg-emerald-600 text-white"
+                        : isGenerating
+                          ? "bg-stone-200 text-stone-400"
+                          : "bg-stone-100 text-stone-700 hover:bg-stone-200"
+                  }`}
+                >
+                  {alreadyIn ? `${fav.name} ✓` : copied === fav.name ? "Copied!" : isGenerating ? "..." : fav.name}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Custom invite */}
+        <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
+          <h2 className="font-semibold text-stone-700 mb-3">Custom invite</h2>
+          <form onSubmit={handleCustomInvite} className="flex gap-2">
+            <input
+              type="text"
+              value={customName}
+              onChange={(e) => setCustomName(e.target.value)}
+              placeholder="Player name"
+              className="flex-1 px-4 py-2 border-2 border-stone-200 rounded-xl text-sm focus:outline-none focus:border-emerald-600"
+            />
+            <button
+              type="submit"
+              disabled={!customName.trim() || generating !== null}
+              className="px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-xl disabled:opacity-50 active:scale-95 transition-transform"
+            >
+              Generate Link
+            </button>
+          </form>
+        </div>
+
+        {/* Delete game */}
+        <div className="flex justify-center">
+          <button
+            onClick={deleteGame}
+            className="inline-flex items-center gap-1.5 px-6 py-2 bg-red-50 text-red-500 font-medium text-sm rounded-xl hover:bg-red-100 transition-colors active:scale-95"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+            </svg>
+            Delete game
+          </button>
+        </div>
       </div>
 
       {/* Toast */}

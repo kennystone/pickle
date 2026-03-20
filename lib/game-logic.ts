@@ -4,6 +4,12 @@
 
 const PA_MAP_URL = "https://maps.app.goo.gl/2semxb1XU9zmQ3ky7";
 
+export type AdminAction = "create" | "delete" | "invite" | "remove_player";
+
+export function canAdminPerformAction(isAdmin: boolean, action: AdminAction): boolean {
+  return isAdmin;
+}
+
 export function isGameFull(attendeeCount: number, peopleNeeded: number): boolean {
   return attendeeCount >= peopleNeeded;
 }

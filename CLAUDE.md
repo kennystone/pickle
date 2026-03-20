@@ -1,4 +1,10 @@
 
+## Git
+
+Never push unless explicitly told to. Commit is fine, but wait for permission to push.
+
+## Runtime
+
 Default to using Bun instead of Node.js.
 
 - Use `bun <file>` instead of `node <file>` or `ts-node <file>`

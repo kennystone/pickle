@@ -90,3 +90,26 @@ export async function POST(request: Request) {
   log.info("game created", { slug, date, time, place, people_needed });
   return NextResponse.json({ id: data.id });
 }
+
+export async function DELETE(request: Request) {
+  const admin = await isAdmin();
+  if (!admin) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  const { id } = await request.json();
+  if (!id) {
+    return NextResponse.json({ error: "Missing id" }, { status: 400 });
+  }
+
+  const supabase = createServerClient();
+  const { error } = await supabase.from("games").delete().eq("id", id);
+
+  if (error) {
+    log.error("game delete failed", { error: error.message, id });
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  log.info("game deleted", { id });
+  return NextResponse.json({ success: true });
+}
