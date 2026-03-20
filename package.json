@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --port 3343",
     "dev:local": "bash scripts/start-local.sh",
-    "build": "npx supabase db push --db-url $SUPABASE_DB_URL && next build",
+    "build": "if [ -n \"$SUPABASE_DB_URL\" ]; then npx supabase db push --db-url $SUPABASE_DB_URL; fi && next build",
     "start": "next start",
     "lint": "next lint"
   },
