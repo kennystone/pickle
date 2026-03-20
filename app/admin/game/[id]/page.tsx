@@ -324,27 +324,16 @@ export default function AdminGamePage() {
                     </span>
                     <div className="flex items-center gap-1.5">
                       <button
+                        onClick={() => copyInviteLink(invite)}
+                        className="w-[4.5rem] px-3 py-1 rounded-full text-xs font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200 text-center"
+                      >
+                        {copied === invite.player_name ? "✓" : "Copy link"}
+                      </button>
+                      <button
                         onClick={handleAction}
                         className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${actionColors[status]}`}
                       >
                         {action}
-                      </button>
-                      <a
-                        href={`/admin/game/player/${invite.slug}`}
-                        target="_blank"
-                        className="px-3 py-1 rounded-full text-xs font-medium bg-stone-100 text-stone-500 hover:bg-stone-200 transition-all"
-                      >
-                        Preview
-                      </a>
-                      <button
-                        onClick={() => copyInviteLink(invite)}
-                        className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                          copied === invite.player_name
-                            ? "bg-emerald-600 text-white"
-                            : "bg-stone-100 text-stone-500 hover:bg-stone-200"
-                        }`}
-                      >
-                        {copied === invite.player_name ? "Copied!" : "Copy link"}
                       </button>
                     </div>
                   </div>
