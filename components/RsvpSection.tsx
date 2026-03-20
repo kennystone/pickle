@@ -4,7 +4,7 @@ import { useState, ReactNode } from "react";
 import Link from "next/link";
 import AttendeeForm from "./AttendeeForm";
 
-export default function RsvpSection({ gameId, defaultName, isFull, children }: { gameId: string; defaultName?: string; isFull?: boolean; children?: ReactNode }) {
+export default function RsvpSection({ gameId, defaultName, isFull, alreadyConfirmed, confirmedAttendeeId, children }: { gameId: string; defaultName?: string; isFull?: boolean; alreadyConfirmed?: boolean; confirmedAttendeeId?: string; children?: ReactNode }) {
   const [name, setName] = useState(defaultName);
 
   return (
@@ -14,6 +14,8 @@ export default function RsvpSection({ gameId, defaultName, isFull, children }: {
           <AttendeeForm
             gameId={gameId}
             defaultName={name}
+            alreadyConfirmed={alreadyConfirmed}
+            confirmedAttendeeId={confirmedAttendeeId}
             onClearName={() => setName(undefined)}
           />
         </div>

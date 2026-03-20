@@ -3,14 +3,14 @@
 import { useState, FormEvent } from "react";
 import PickleballAnimation from "./PickleballAnimation";
 
-export default function AttendeeForm({ gameId, defaultName, onClearName }: { gameId: string; defaultName?: string; onClearName?: () => void }) {
+export default function AttendeeForm({ gameId, defaultName, alreadyConfirmed, confirmedAttendeeId, onClearName }: { gameId: string; defaultName?: string; alreadyConfirmed?: boolean; confirmedAttendeeId?: string; onClearName?: () => void }) {
   const [name, setName] = useState(defaultName ?? "");
   const [knownName, setKnownName] = useState(!!defaultName);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [showAnimation, setShowAnimation] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [attendeeId, setAttendeeId] = useState<string | null>(null);
+  const [submitted, setSubmitted] = useState(!!alreadyConfirmed);
+  const [attendeeId, setAttendeeId] = useState<string | null>(confirmedAttendeeId ?? null);
   const [removing, setRemoving] = useState(false);
   const [declined, setDeclined] = useState(false);
   const [showDeclineAnimation, setShowDeclineAnimation] = useState(false);
@@ -53,10 +53,8 @@ export default function AttendeeForm({ gameId, defaultName, onClearName }: { gam
     if (res.ok) {
       setSubmitted(false);
       setAttendeeId(null);
-      setName("");
-      setKnownName(false);
       setLoading(false);
-      onClearName?.();
+      // Keep name and knownName so they see "can you make it?" again
     } else {
       setError("Failed to remove. Try again.");
     }
@@ -75,7 +73,7 @@ export default function AttendeeForm({ gameId, defaultName, onClearName }: { gam
     return (
       <div className="bg-emerald-600/10 border-2 border-emerald-600 rounded-xl px-4 py-4 text-center space-y-3">
         <span className="text-emerald-600 font-semibold text-lg block">
-          You&apos;re confirmed, {name}! 🥒
+          You&apos;re confirmed, {name}!
         </span>
         <button
           onClick={handleRemove}

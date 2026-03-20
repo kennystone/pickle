@@ -67,6 +67,19 @@ export function getInviteAction(status: InviteStatus): string {
   }
 }
 
+export type RsvpState = "ask" | "confirmed";
+
+export function getRsvpState(
+  playerName: string | undefined,
+  attendeeNames: string[],
+): RsvpState {
+  if (!playerName) return "ask";
+  const isIn = attendeeNames.some(
+    (n) => n.toLowerCase() === playerName.toLowerCase()
+  );
+  return isIn ? "confirmed" : "ask";
+}
+
 export function formatPillText(
   weekday: string,
   shortDate: string,

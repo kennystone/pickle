@@ -68,7 +68,13 @@ export default async function AdminPlayerPreview({ params }: Props) {
 
       {/* Body */}
       <div className="max-w-md mx-auto px-4 pt-4 pb-6 space-y-6">
-        <RsvpSection gameId={game.id} defaultName={invite.player_name}>
+        <RsvpSection
+          gameId={game.id}
+          defaultName={invite.player_name}
+          isFull={(attendees ?? []).length >= game.people_needed}
+          alreadyConfirmed={(attendees ?? []).some((a) => a.name.toLowerCase() === invite.player_name.toLowerCase())}
+          confirmedAttendeeId={(attendees ?? []).find((a) => a.name.toLowerCase() === invite.player_name.toLowerCase())?.id}
+        >
           <div className="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
             <h2 className="font-semibold text-stone-700 mb-4">Who&apos;s in</h2>
             <AttendeeList

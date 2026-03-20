@@ -10,6 +10,7 @@ import {
   gameFullMessage,
   getInviteStatus,
   getInviteAction,
+  getRsvpState,
 } from "./game-logic";
 
 describe("isGameFull", () => {
@@ -182,6 +183,34 @@ describe("getInviteAction", () => {
 
   test("declined -> Reset", () => {
     expect(getInviteAction("declined")).toBe("Reset");
+  });
+});
+
+describe("getRsvpState", () => {
+  test("Andria is already in — should see confirmed, not ask", () => {
+    expect(getRsvpState("Andria", ["Kenny Stone", "Andria"])).toBe("confirmed");
+  });
+
+  test("confirmed player should see leave card, not 'can you make it'", () => {
+    // This is the regression test:
+    // When Andria is already confirmed, getRsvpState must return "confirmed"
+    // so the UI shows "You're confirmed!" with a Leave button,
+    // NOT the "can you make it?" prompt
+    const state = getRsvpState("Andria", ["Kenny Stone", "Andria"]);
+    expect(state).toBe("confirmed");
+    expect(state).not.toBe("ask");
+  });
+
+  test("case insensitive", () => {
+    expect(getRsvpState("andria", ["Kenny Stone", "Andria"])).toBe("confirmed");
+  });
+
+  test("player not in attendees — should ask", () => {
+    expect(getRsvpState("Kevin", ["Kenny Stone", "Andria"])).toBe("ask");
+  });
+
+  test("no player name — should ask", () => {
+    expect(getRsvpState(undefined, ["Kenny Stone", "Andria"])).toBe("ask");
   });
 });
 
