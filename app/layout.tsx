@@ -1,5 +1,17 @@
 import type { Metadata } from "next";
+import { Instrument_Sans, Instrument_Serif } from "next/font/google";
 import "./globals.css";
+
+const instrumentSans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+const instrumentSerif = Instrument_Serif({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-serif",
+});
 
 export const metadata: Metadata = {
   title: "Kenny Pickle — Pickleball Games",
@@ -12,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen">{children}</body>
+    <html lang="en" className={`${instrumentSans.variable} ${instrumentSerif.variable}`}>
+      <body className="min-h-screen font-sans">{children}</body>
     </html>
   );
 }

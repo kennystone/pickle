@@ -7,11 +7,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
+      },
       colors: {
         pickle: {
-          green: "#5D8A34",
-          light: "#8CB84A",
-          dark: "#3D5E20",
+          green: "#059669",
+          light: "#34d399",
+          dark: "#065f46",
         },
         ball: {
           yellow: "#F5E642",
