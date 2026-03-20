@@ -325,7 +325,7 @@ export default function AdminGamePage() {
                     <div className="flex items-center gap-1.5">
                       <button
                         onClick={() => copyInviteLink(invite)}
-                        className="w-[4.5rem] px-3 py-1 rounded-full text-xs font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200 text-center"
+                        className="px-3 py-1 rounded-full text-xs font-medium transition-all bg-stone-100 text-stone-500 hover:bg-stone-200 whitespace-nowrap"
                       >
                         {copied === invite.player_name ? "✓" : "Copy link"}
                       </button>
