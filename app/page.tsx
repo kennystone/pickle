@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-950 to-teal-700 flex items-center justify-center">
+    <div className="min-h-dvh bg-gradient-to-b from-teal-950 to-teal-700 flex items-center justify-center">
       <div className="text-center">
         <svg className="w-20 h-20 mx-auto mb-2" viewBox="0 0 1200 1200" fill="#10b981">
           <path d="m502.69 727.31c-7.8281 0-15.609-3.2344-21.188-9.6094-10.219-11.672-9.0469-29.484 2.625-39.703l134.81-117.94c11.672-10.219 29.438-9.0469 39.656 2.625s9.0469 29.484-2.6719 39.703l-134.81 117.94c-5.3438 4.6875-11.953 6.9375-18.516 6.9375z"/>

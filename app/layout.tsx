@@ -25,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${instrumentSans.variable} ${instrumentSerif.variable}`}>
-      <body className="min-h-screen font-sans">{children}</body>
+      <body className="min-h-dvh font-sans">{children}</body>
     </html>
   );
 }

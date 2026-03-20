@@ -44,7 +44,7 @@ export default async function AdminPlayerPreview({ params }: Props) {
   const pillTime = `${weekday} ${shortDate} · ${timeRange}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-950 to-teal-700">
+    <div className="min-h-dvh bg-gradient-to-b from-teal-950 to-teal-700">
       {/* Admin preview banner */}
       <div className="bg-amber-500 text-amber-950 text-center text-xs font-semibold py-1.5 px-4">
         Preview as {invite.player_name} &middot;{" "}

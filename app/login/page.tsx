@@ -29,7 +29,7 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-teal-950 to-teal-700 px-4">
+    <div className="min-h-dvh flex items-center justify-center bg-gradient-to-b from-teal-950 to-teal-700 px-4">
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <svg className="w-20 h-20 mx-auto mb-2" viewBox="0 0 1200 1200" fill="#10b981">

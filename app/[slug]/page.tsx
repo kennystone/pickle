@@ -119,7 +119,7 @@ export default async function GamePage({ params }: Props) {
   const paMapUrl = "https://maps.app.goo.gl/2semxb1XU9zmQ3ky7";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-teal-950 to-teal-700">
+    <div className="min-h-dvh bg-gradient-to-b from-teal-950 to-teal-700">
       {/* Header */}
       <div className="text-white px-4 pt-8 pb-4">
         <div className="max-w-md mx-auto text-center">
