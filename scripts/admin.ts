@@ -9,7 +9,7 @@ const green = (s: string) => `\x1b[32m${s}\x1b[0m`;
 const dim = (s: string) => `\x1b[2m${s}\x1b[0m`;
 const bold = (s: string) => `\x1b[1m${s}\x1b[0m`;
 
-const BASE_URL = process.env.BASE_URL || "https://pickle.kenny.io";
+const BASE_URL = process.env.BASE_URL || "http://localhost:3343";
 
 function die(msg: string): never {
   console.error(red(`Error: ${msg}`));
@@ -187,8 +187,8 @@ async function createGame(args: string[]) {
     .insert({ game_id: data.id, name: "Kenny Stone" } as never);
 
   console.log(green(`Game created: ${shortId(data.id)}`));
-  console.log(`  Slug: ${data.slug}`);
   console.log(`  Date: ${data.date} ${formatTimeRange(data.time, data.duration)}`);
+  console.log(`  Link: ${BASE_URL}/${data.slug}`);
   console.log(`  ${dim(data.id)}`);
 }
 
@@ -245,7 +245,7 @@ async function invitePlayer(
 
   if (existing) {
     console.log(dim(`  ${playerName.padEnd(20)} already invited (${existing.slug})`));
-    console.log(`  ${BASE_URL}/invite/${existing.slug}`);
+    console.log(`  ${BASE_URL}/${existing.slug}`);
     return;
   }
 
@@ -276,7 +276,7 @@ async function invitePlayer(
   if (error || !data) die(error?.message ?? "Insert failed");
 
   console.log(green(`  ${playerName.padEnd(20)} ${data.slug}`));
-  console.log(`  ${BASE_URL}/invite/${data.slug}`);
+  console.log(`  ${BASE_URL}/${data.slug}`);
 }
 
 async function listAttendees(gameId: string) {
