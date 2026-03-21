@@ -64,7 +64,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: "Game not found — Kenny Pickle" };
   }
 
-  const { game, attendees } = data;
+  const { game, attendees, defaultName } = data;
   const count = attendees.length;
 
   const dateObj = new Date(game.date + "T00:00:00");
@@ -74,16 +74,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     day: "numeric",
   });
 
-  const [hour, minute] = game.time.split(":");
-  const timeObj = new Date();
-  timeObj.setHours(parseInt(hour!), parseInt(minute!));
-  const timeStr = timeObj.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-  });
+  const timeRange = formatTimeRange(game.time, game.duration || 120);
 
-  const title = `Pickleball @ ${game.place} — ${dateStr}`;
-  const description = `${timeStr} · ${count}/${game.people_needed} players confirmed. Join us!`;
+  const title = defaultName
+    ? `${defaultName}, you're invited to pickleball!`
+    : `Pickleball @ ${game.place}`;
+  const description = `${dateStr} · ${timeRange} @ ${game.place} · ${count}/${game.people_needed} confirmed`;
 
   return {
     title,
@@ -92,7 +88,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       title,
       description,
       type: "website",
-      siteName: "Kenny Pickle",
+      siteName: "Kenny's Game",
     },
     twitter: {
       card: "summary",
