@@ -77,7 +77,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const timeRange = formatTimeRange(game.time, game.duration || 120);
 
   const title = defaultName
-    ? `${defaultName}, you're invited to pickleball!`
+    ? `${defaultName}, you're invited to Kenny's pickleball game!`
     : `Pickleball @ ${game.place}`;
   const description = `${dateStr} · ${timeRange} @ ${game.place} · ${count}/${game.people_needed} confirmed`;
 

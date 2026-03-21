@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const links = [
   { href: "/admin/create", label: "New Game", description: "Create a new pickleball game" },
-  { href: "/admin/list", label: "Games", description: "View all games" },
+  { href: "/admin/games", label: "Games", description: "View all games" },
   { href: "/admin/favorites", label: "Favorites", description: "Manage favorite players" },
 ];
 

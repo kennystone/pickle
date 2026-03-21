@@ -10,7 +10,7 @@ interface Ball {
   radius: number;
 }
 
-const DURATION = 8000;
+const DURATION = 16000;
 
 // Ball with trailing lines SVG (noun-pickleball-6530093)
 function pickleballSvg(color: string) {

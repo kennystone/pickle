@@ -13,7 +13,6 @@ export default function AttendeeForm({ gameId, defaultName, alreadyConfirmed, co
   const [attendeeId, setAttendeeId] = useState<string | null>(confirmedAttendeeId ?? null);
   const [removing, setRemoving] = useState(false);
   const [declined, setDeclined] = useState(false);
-  const [showDeclineAnimation, setShowDeclineAnimation] = useState(false);
 
   async function handleSubmit(e?: FormEvent) {
     e?.preventDefault();
@@ -61,7 +60,7 @@ export default function AttendeeForm({ gameId, defaultName, alreadyConfirmed, co
     setRemoving(false);
   }
 
-  if (declined && !showDeclineAnimation) {
+  if (declined) {
     return (
       <div className="text-center py-2">
         <span className="text-stone-400 text-lg">Maybe next time!</span>
@@ -93,10 +92,6 @@ export default function AttendeeForm({ gameId, defaultName, alreadyConfirmed, co
         {showAnimation && (
           <PickleballAnimation onDone={() => setShowAnimation(false)} />
         )}
-        {showDeclineAnimation && (
-          <PickleballAnimation variant="decline" onDone={() => setShowDeclineAnimation(false)} />
-        )}
-
         <div className="text-center space-y-4">
           <p className="text-lg font-semibold text-stone-700">
             {name}, can you make it?
@@ -110,7 +105,7 @@ export default function AttendeeForm({ gameId, defaultName, alreadyConfirmed, co
               {loading ? "..." : "I'm In!"}
             </button>
             <button
-              onClick={() => { setDeclined(true); setShowDeclineAnimation(true); }}
+              onClick={() => { setDeclined(true); }}
               disabled={loading}
               className="px-6 py-3 bg-stone-100 text-stone-500 font-medium rounded-xl active:scale-95 transition-transform"
             >

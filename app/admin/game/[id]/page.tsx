@@ -174,7 +174,7 @@ export default function AdminGamePage() {
       body: JSON.stringify({ id }),
     });
     if (res.ok) {
-      router.push("/admin/list");
+      router.push("/admin/games");
     }
   }
 
